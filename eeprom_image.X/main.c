@@ -61,7 +61,7 @@ void main(void) {
     while(1){
         
         if(got_data_bool){
-            if(data != 'x')
+            if(data != 'x'){
                 Eeprom_write(imge_size_counter,data);
                 uart_send('\r');
                 imge_size_counter++;
@@ -69,39 +69,39 @@ void main(void) {
                 if(imge_size_counter >= 256){
                     imge_size_counter = 0;
                 }
+            }
+            
             if(data == 'x'){
                 start_read_bool = true;
             }
-            got_data_bool = false;    
+            
+            got_data_bool = false;     
         }
         
         if(start_read_bool){
-           sprintf(print_buffer,"print loop\n\r");
-           uart_send_string(print_buffer); 
-           uint8_t res_count = 0;
+            sprintf(print_buffer,"print loop\n\r");
+            uart_send_string(print_buffer); 
+            uint8_t res_count = 0;
            
-           for(uint16_t i = 0; i < 256 ; i++){
-               
-               uint8_t read_data = Eeprom_read(i);
-               if(read_data == 0){
-                   uart_send(178);
-               }
-               if(read_data == 255){
-                   uart_send(' ');
-               }
-               res_count++;
-               if(res_count == 16){
-                   uart_send('\n');
-                   uart_send('\r');
-                   res_count = 0;
-               }
-            start_read_bool = false;
-           }
-            
-        }
-            
-    }
-        
+            for(uint16_t i = 0; i < 256 ; i++){
+
+                uint8_t read_data = Eeprom_read(i);
+                 if(read_data == 0){
+                    uart_send(178);
+                }
+                if(read_data == 255){
+                    uart_send(' ');
+                }
+                res_count++;
+                if(res_count == 16){
+                    uart_send('\n');
+                    uart_send('\r');
+                    res_count = 0;
+                }
+                start_read_bool = false;
+            }
+        }        
+    }       
 } 
 
 
