@@ -1,5 +1,5 @@
 #include <xc.h>
-#include <p18f4520.h>
+#include <pic18f4520.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -38,8 +38,8 @@ void Eeprom_write(uint8_t addr,uint8_t data){
      
 }
 
-void interrupt high_isr(void);
-void interrupt low_priority low_isr(void);
+void __interrupt() high_isr(void);
+void __interrupt(low_priority) low_isr(void);
 
 void main(void) {
     bool start_read_bool = false;
@@ -105,7 +105,7 @@ void main(void) {
 } 
 
 
-void interrupt high_isr(void){
+void __interrupt() high_isr(void){
     INTCONbits.GIEH = 0;
     if(PIR1bits.RCIF){
         uart_receiver(&data,&got_data_bool);
@@ -115,7 +115,7 @@ void interrupt high_isr(void){
     INTCONbits.GIEH = 1;
 }
 
-void interrupt low_priority low_isr(void){
+void __interrupt(low_priority) low_isr(void){
     INTCONbits.GIEH = 0;
     
     INTCONbits.GIEH = 1;
